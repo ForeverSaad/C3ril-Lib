@@ -12,6 +12,7 @@ local Library = {}
 local PageTab
 
 function Library:CreateUi(Title)
+	local Main = Instance.new("ScreenGui")
 	local MainFrame = Instance.new("Frame")
 	local UICorner = Instance.new("UICorner")
 	local Pages = Instance.new("Frame")
@@ -20,8 +21,10 @@ function Library:CreateUi(Title)
 	local Title = Instance.new("TextLabel")
 	local UIListLayout = Instance.new("UIListLayout")
 	
+	Main.Parent = game.CoreGui
+	
 	MainFrame.Name = "MainFrame"
-	MainFrame.Parent = game.CoreGui
+	MainFrame.Parent = Main
 	MainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 	MainFrame.Position = UDim2.new(0.218009502, 0, 0.198003322, 0)
 	MainFrame.Size = UDim2.new(0.480726719, 0, 0.534276187, 0)
