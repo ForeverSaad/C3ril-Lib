@@ -21,7 +21,7 @@ function Library:CreateUi(Title)
 	local UIListLayout = Instance.new("UIListLayout")
 	
 	MainFrame.Name = "MainFrame"
-	MainFrame.Parent = game.StarterGui.Main
+	MainFrame.Parent = game.CoreGui
 	MainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 	MainFrame.Position = UDim2.new(0.218009502, 0, 0.198003322, 0)
 	MainFrame.Size = UDim2.new(0.480726719, 0, 0.534276187, 0)
