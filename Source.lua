@@ -22,7 +22,7 @@ function Library:Window(Name)
     MainFrame.BorderColor3 = Color3.fromRGB(172, 172, 174)
     MainFrame.BorderSizePixel = 2
     MainFrame.Position = UDim2.new(0.564770937, 0, 0.0831946731, 0)
-    MainFrame.Size = UDim2.new(0.316429734, 0, 0.831946731, 0)
+    MainFrame.Size = UDim2.new(0.27, 0,0.71, 0)
 
     Divider.Name = "Divider"
     Divider.Parent = MainFrame
@@ -75,6 +75,6 @@ function Library:Window(Name)
             end
         end)
     end
+    return TabButtonHolder
 end
-
 return Library
