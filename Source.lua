@@ -76,3 +76,5 @@ function Library:Window(Name)
         end)
     end
 end
+
+return Library
