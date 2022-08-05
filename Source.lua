@@ -1,237 +1,78 @@
---[[
-	
-	First UI library. Feedback is wanted.
-	
-]]
-
-
---[[
-	
-	First UI library. Feedback is wanted.
-	
-]]
-
-
-
+-- Z3N LIBRARY
 
 local Library = {}
 
-local PageTab
+local TS = game:GetService("TweenService")
 
-function Library:CreateUi(Title)
-	local Main = Instance.new("ScreenGui")
-	local MainFrame = Instance.new("Frame")
-	local UICorner = Instance.new("UICorner")
-	local Pages = Instance.new("Frame")
-	PageTab = Pages
-	local UICorner_2 = Instance.new("UICorner")
-	local Title = Instance.new("TextLabel")
-	local UIListLayout = Instance.new("UIListLayout")
-	
-	Main.Name = "Main"
-	Main.Parent = game.CoreGui
-	Main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	
-	MainFrame.Name = "MainFrame"
-	MainFrame.Parent = Main
-	MainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	MainFrame.Position = UDim2.new(0.218009502, 0, 0.198003322, 0)
-	MainFrame.Size = UDim2.new(0.480726719, 0, 0.534276187, 0)
+--Properties:
+local Main = Instance.new("ScreenGui")
+Main.Name = "Main"
+Main.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-	UICorner.CornerRadius = UDim.new(0, 4)
-	UICorner.Parent = MainFrame
+function Library:Window(Name)
+    local MainFrame = Instance.new("Frame")
+    local Divider = Instance.new("Frame")
+    local TabHolder = Instance.new("Frame")
+    local UIListLayout = Instance.new("UIListLayout")
 
-	Pages.Name = "Pages"
-	Pages.Parent = MainFrame
-	Pages.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
-	Pages.Size = UDim2.new(0.285549313, 0, 1, 0)
+    MainFrame.Name = "MainFrame"
+    MainFrame.Parent = Main
+    MainFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+    MainFrame.BorderColor3 = Color3.fromRGB(172, 172, 174)
+    MainFrame.BorderSizePixel = 2
+    MainFrame.Position = UDim2.new(0.564770937, 0, 0.0831946731, 0)
+    MainFrame.Size = UDim2.new(0.316429734, 0, 0.831946731, 0)
 
-	UICorner_2.CornerRadius = UDim.new(0, 4)
-	UICorner_2.Parent = Pages
+    Divider.Name = "Divider"
+    Divider.Parent = MainFrame
+    Divider.BackgroundColor3 = Color3.fromRGB(164, 66, 179)
+    Divider.BorderSizePixel = 0
+    Divider.Position = UDim2.new(0, 0, 0.209999993, 0)
+    Divider.Size = UDim2.new(1, 0, 0.00400000019, 0)
 
-	Title.Name = "Title"
-	Title.Parent = Pages
-	Title.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
-	Title.BackgroundTransparency = 1.000
-	Title.Size = UDim2.new(1.00000012, 0, 0.166372225, 0)
-	Title.Font = Enum.Font.GothamBold
-	Title.Text = Title
-	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Title.TextSize = 26.000
-	Title.TextWrapped = true
+    TabHolder.Name = "TabHolder"
+    TabHolder.Parent = MainFrame
+    TabHolder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TabHolder.BackgroundTransparency = 1.000
+    TabHolder.BorderSizePixel = 0
+    TabHolder.Position = UDim2.new(0.00998502132, 0, 0.145999998, 0)
+    TabHolder.Size = UDim2.new(0.980029941, 0, 0.064000003, 0)
 
-	UIListLayout.Parent = Pages
-	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	
-	local function KOZAXFR_fake_script() -- MainFrame.Dragify 
-		local script = Instance.new('LocalScript', MainFrame)
+    UIListLayout.Parent = TabHolder
+    UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+    UIListLayout.Padding = UDim.new(0, 8)
 
-		local UserInputService = game:GetService("UserInputService")
+    local TabButtonHolder = {}
 
-		local gui = script.Parent
+    local CurrentTab = nil
 
-		local dragging
-		local dragInput
-		local dragStart
-		local startPos
+    function TabButtonHolder:Tab(Name)
+        local TabButton = Instance.new("TextButton")
 
-		local function update(input)
-			local delta = input.Position - dragStart
-			gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-		end
+        TabButton.Name = "TabButton"
+        TabButton.Parent = TabHolder
+        TabButton.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+        TabButton.BorderSizePixel = 0
+        TabButton.Position = UDim2.new(0, 0, 0.406249046, 0)
+        TabButton.Size = UDim2.new(0.10484273, 0, 0.593750954, 0)
+        TabButton.AutoButtonColor = false
+        TabButton.Font = Enum.Font.Code
+        TabButton.Text = "<b>"..Name.."</b>"
+        TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TabButton.TextSize = 14.000
 
-		gui.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-				dragging = true
-				dragStart = input.Position
-				startPos = gui.Position
+        TabButton.MouseButton1Click:Connect(function()
+            if CurrentTab ~= TabButton then
+                local TI = TweenInfo.new(0.15)
 
-				input.Changed:Connect(function()
-					if input.UserInputState == Enum.UserInputState.End then
-						dragging = false
-					end
-				end)
-			end
-		end)
+                TS:Create(CurrentTab, TI, {BackgroundColor3 = Color3.fromRGB(24, 24, 24)}):Play()
+                TS:Create(TabButton, TI, {BackgroundColor3 = Color3.fromRGB(164, 66, 179)}):Play()
 
-		gui.InputChanged:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-				dragInput = input
-			end
-		end)
-
-		UserInputService.InputChanged:Connect(function(input)
-			if input == dragInput and dragging then
-				update(input)
-			end
-		end)
-	end
-	coroutine.wrap(KOZAXFR_fake_script)()
+                CurrentTab = TabButton
+            end
+        end)
+    end
 end
-
-function Library:AddTab(Title)
-	local Button1 = Instance.new("TextButton")
-	
-	Button1.Name = "Button1"
-	Button1.Parent = PageTab
-	Button1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Button1.BackgroundTransparency = 1.000
-	Button1.Position = UDim2.new(0, 0, 0.166372225, 0)
-	Button1.Size = UDim2.new(1, 0, 0.0875116065, 0)
-	Button1.Font = Enum.Font.Gotham
-	Button1.Text = Title
-	Button1.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Button1.TextSize = 22.000
-end
-
-return Library -- <3
-
-local Library = {}
-
-local PageTab
-
-function Library:CreateUi(Title)
-	local Main = Instance.new("ScreenGui")
-	local MainFrame = Instance.new("Frame")
-	local UICorner = Instance.new("UICorner")
-	local Pages = Instance.new("Frame")
-	PageTab = Pages
-	local UICorner_2 = Instance.new("UICorner")
-	local Title = Instance.new("TextLabel")
-	local UIListLayout = Instance.new("UIListLayout")
-	
-	Main.Parent = game.CoreGui
-	
-	MainFrame.Name = "MainFrame"
-	MainFrame.Parent = Main
-	MainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	MainFrame.Position = UDim2.new(0.218009502, 0, 0.198003322, 0)
-	MainFrame.Size = UDim2.new(0.480726719, 0, 0.534276187, 0)
-
-	UICorner.CornerRadius = UDim.new(0, 4)
-	UICorner.Parent = MainFrame
-
-	Pages.Name = "Pages"
-	Pages.Parent = MainFrame
-	Pages.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
-	Pages.Size = UDim2.new(0.285549313, 0, 1, 0)
-
-	UICorner_2.CornerRadius = UDim.new(0, 4)
-	UICorner_2.Parent = Pages
-
-	Title.Name = "Title"
-	Title.Parent = Pages
-	Title.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
-	Title.BackgroundTransparency = 1.000
-	Title.Size = UDim2.new(1.00000012, 0, 0.166372225, 0)
-	Title.Font = Enum.Font.GothamBold
-	Title.Text = Title
-	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Title.TextSize = 26.000
-	Title.TextWrapped = true
-
-	UIListLayout.Parent = Pages
-	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	
-	local function KOZAXFR_fake_script() -- MainFrame.Dragify 
-		local script = Instance.new('LocalScript', MainFrame)
-
-		local UserInputService = game:GetService("UserInputService")
-
-		local gui = script.Parent
-
-		local dragging
-		local dragInput
-		local dragStart
-		local startPos
-
-		local function update(input)
-			local delta = input.Position - dragStart
-			gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-		end
-
-		gui.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-				dragging = true
-				dragStart = input.Position
-				startPos = gui.Position
-
-				input.Changed:Connect(function()
-					if input.UserInputState == Enum.UserInputState.End then
-						dragging = false
-					end
-				end)
-			end
-		end)
-
-		gui.InputChanged:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-				dragInput = input
-			end
-		end)
-
-		UserInputService.InputChanged:Connect(function(input)
-			if input == dragInput and dragging then
-				update(input)
-			end
-		end)
-	end
-	coroutine.wrap(KOZAXFR_fake_script)()
-end
-
-function Library:AddTab(Title)
-	local Button1 = Instance.new("TextButton")
-	
-	Button1.Name = "Button1"
-	Button1.Parent = PageTab
-	Button1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Button1.BackgroundTransparency = 1.000
-	Button1.Position = UDim2.new(0, 0, 0.166372225, 0)
-	Button1.Size = UDim2.new(1, 0, 0.0875116065, 0)
-	Button1.Font = Enum.Font.Gotham
-	Button1.Text = Title
-	Button1.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Button1.TextSize = 22.000
-end
-
-return Library -- <3
